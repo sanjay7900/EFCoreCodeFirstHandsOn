@@ -17,7 +17,7 @@ namespace EntityFrameWorkData.Entities
         public string? UniversityName { get; set; }
         public int ? PassingYear { get; set; }
         public int ? MarksPercentage { get; set; }
-        public int EmployeeId { get; set; } 
+        public Employee? employee { get; set; } 
 
     }
 }

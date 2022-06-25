@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EntityFrameWorkData.Migrations
 {
     [DbContext(typeof(DemoDbContext))]
-    [Migration("20220620064222_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20220625045856_initialMigration")]
+    partial class initialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -75,9 +75,11 @@ namespace EntityFrameWorkData.Migrations
 
             modelBuilder.Entity("EntityFrameWorkData.Entities.EmployeEducation", b =>
                 {
-                    b.HasOne("EntityFrameWorkData.Entities.Employee", null)
+                    b.HasOne("EntityFrameWorkData.Entities.Employee", "employee")
                         .WithMany("employeeEducation")
                         .HasForeignKey("EmployeeId");
+
+                    b.Navigation("employee");
                 });
 
             modelBuilder.Entity("EntityFrameWorkData.Entities.Employee", b =>

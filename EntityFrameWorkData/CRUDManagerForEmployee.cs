@@ -1,4 +1,5 @@
 ﻿using EntityFrameWorkData.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,17 +23,18 @@ namespace EntityFrameWorkData
         }
         public List<Employee> showAllEmployee()
         {
-            return context.Employees.ToList();
+            return context.Employees.Include(e=>e.employeeEducation).ToList();
         }
         public void DeleteEmployeeById(int id)
         {
-            var deleteEmp = context.Employees.Where(x => x.EmployeeId == id).FirstOrDefault();
+            var deleteEmp = context.Employees.Where(x => x.EmployeeId == id).Include(e=>e.employeeEducation).FirstOrDefault();
             if (deleteEmp == null)
             {
                 Console.WriteLine($"No record Found whth id  {id}");
             }
             else
             {
+                deleteEmp.employeeEducation.Clear();    
                 context.Employees.Remove(deleteEmp);
                 context.SaveChanges();
                 Console.WriteLine("DELETED");
@@ -42,8 +44,8 @@ namespace EntityFrameWorkData
         public Employee GetEmployeeById(int EmployeeId)
         {
             Employee employee = new Employee();
-            var emp= context.Employees.SingleOrDefault(x => x.EmployeeId == EmployeeId);
-            if(emp == null)
+            var emp= context.Employees.Where(x => x.EmployeeId == EmployeeId).Include(e => e.employeeEducation).FirstOrDefault();
+            if (emp == null)
             {
                 Console.WriteLine("record Not Found {0}",EmployeeId);
                 employee.EmployeeName = "not Found";
@@ -56,9 +58,9 @@ namespace EntityFrameWorkData
 
             return employee;
         }
-        public void UpdateEmployee(int EmployeeId,Employee employee)
+        public void UpdateEmployee(int EmployeeId,Employee employee,List<EmployeEducation>edu)
         {
-            var updateemp=context.Employees.Where(x => x.EmployeeId == EmployeeId).FirstOrDefault();
+            var updateemp=context.Employees.Where(x => x.EmployeeId == EmployeeId).Include(e=>e.employeeEducation).FirstOrDefault();
             if(updateemp == null)
             {
                 Console.WriteLine("no record Found with this id = {0} to be  Update ",EmployeeId);
@@ -68,6 +70,7 @@ namespace EntityFrameWorkData
             {
                 updateemp.EmployeeName = employee.EmployeeName;
                updateemp.EmployeeAddress=employee.EmployeeAddress;
+                updateemp.employeeEducation = edu;
                 context.Employees.Update(updateemp);
                 context.SaveChanges();
 

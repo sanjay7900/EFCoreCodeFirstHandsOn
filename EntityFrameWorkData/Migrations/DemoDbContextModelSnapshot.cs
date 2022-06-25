@@ -73,9 +73,11 @@ namespace EntityFrameWorkData.Migrations
 
             modelBuilder.Entity("EntityFrameWorkData.Entities.EmployeEducation", b =>
                 {
-                    b.HasOne("EntityFrameWorkData.Entities.Employee", null)
+                    b.HasOne("EntityFrameWorkData.Entities.Employee", "employee")
                         .WithMany("employeeEducation")
                         .HasForeignKey("EmployeeId");
+
+                    b.Navigation("employee");
                 });
 
             modelBuilder.Entity("EntityFrameWorkData.Entities.Employee", b =>
